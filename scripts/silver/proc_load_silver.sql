@@ -64,11 +64,11 @@ BEGIN
 		FROM (
 			SELECT
 				*,
-				ROW_NUMBER() OVER (PARTITION BY cst_id ORDER BY cst_create_date DESC) AS flag_last
+				ROW_NUMBER() OVER (PARTITION BY cst_id ORDER BY cst_create_date DESC) AS flag_latest
 			FROM bronze.crm_cust_info
 			WHERE cst_id IS NOT NULL
 		) t
-		WHERE flag_last = 1; -- Select the most recent record per customer
+		WHERE flag_latest = 1; -- Select the most recent record per customer
 		SET @end_time = GETDATE();
         PRINT '>> Load Duration: ' + CAST(DATEDIFF(SECOND, @start_time, @end_time) AS NVARCHAR) + ' seconds';
         PRINT '>> -------------';
